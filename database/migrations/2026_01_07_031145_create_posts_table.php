@@ -19,7 +19,7 @@ return new class extends Migration
             $table->text('excerpt')->nullable();
             $table->longText('body');
             $table->longText('body_rendered')->nullable();
-            $table->enum('status', ['draft', 'published', 'scheduled'])->default('draft');
+            $table->enum('status', ['draft', 'published'])->default('draft');
             $table->timestamp('published_at')->nullable()->index();
             $table->string('cover_image_path')->nullable();
             $table->timestamps();

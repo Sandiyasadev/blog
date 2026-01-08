@@ -39,9 +39,6 @@
         <meta property="article:modified_time" content="@yield('modified_time')" />
     @endif
 
-    {{-- RSS/Atom Feed Links --}}
-    <link rel="alternate" type="application/rss+xml" title="RSS Feed" href="{{ route('feed.rss') }}" />
-    <link rel="alternate" type="application/atom+xml" title="Atom Feed" href="{{ route('feed.atom') }}" />
 
     {{-- Fonts --}}
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -50,11 +47,6 @@
 
     {{-- Vite Assets --}}
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-
-    {{-- Turnstile CAPTCHA --}}
-    @if (config('services.turnstile.site_key'))
-        <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
-    @endif
 
     {{-- Additional Head Content --}}
     @stack('head')
@@ -77,14 +69,7 @@
                 <a class="hover:text-primary transition-colors" href="{{ route('home') }}">Home</a>
                 <a class="hover:text-primary transition-colors" href="{{ route('about') }}">About</a>
                 <a class="hover:text-primary transition-colors" href="{{ route('posts.index') }}">Writings</a>
-                <a class="hover:text-primary transition-colors" href="{{ route('contact') }}">Contact</a>
             </nav>
-            <a href="{{ route('feed.rss') }}" class="hidden sm:flex items-center gap-1 text-gray-500 hover:text-primary transition-colors" title="RSS Feed">
-                <span class="material-symbols-outlined text-xl">rss_feed</span>
-            </a>
-            <button class="hidden sm:flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 px-6 bg-primary hover:bg-blue-600 transition-colors text-white text-sm font-bold leading-normal tracking-[0.015em]">
-                <span class="truncate">Subscribe</span>
-            </button>
             {{-- Mobile Menu Button --}}
             <button
                 @click="mobileMenuOpen = !mobileMenuOpen"
@@ -143,19 +128,6 @@
                 <span class="material-symbols-outlined text-xl">article</span>
                 Writings
             </a>
-            <a href="{{ route('contact') }}" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-100 font-medium" @click="mobileMenuOpen = false">
-                <span class="material-symbols-outlined text-xl">mail</span>
-                Contact
-            </a>
-            <a href="{{ route('feed.rss') }}" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-100 font-medium" @click="mobileMenuOpen = false">
-                <span class="material-symbols-outlined text-xl">rss_feed</span>
-                RSS Feed
-            </a>
-        </div>
-        <div class="mt-auto p-4 border-t border-gray-100">
-            <button class="w-full rounded-full py-3 bg-primary hover:bg-blue-600 transition-colors text-white font-bold">
-                Subscribe
-            </button>
         </div>
     </nav>
 
@@ -166,9 +138,7 @@
         <div class="max-w-[1200px] mx-auto px-4 md:px-6 py-8 text-sm text-gray-500 flex flex-col md:flex-row gap-4 md:items-center md:justify-between">
             <span>&copy; {{ date('Y') }} The Daily Journal. All rights reserved.</span>
             <div class="flex gap-4">
-                <a href="{{ route('feed.rss') }}" class="hover:text-primary">RSS</a>
                 <a href="{{ route('about') }}" class="hover:text-primary">About</a>
-                <a href="{{ route('contact') }}" class="hover:text-primary">Contact</a>
             </div>
         </div>
     </footer>

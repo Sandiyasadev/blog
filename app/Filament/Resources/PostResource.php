@@ -81,18 +81,12 @@ class PostResource extends Resource
                                     ->options([
                                         'draft' => 'Draft',
                                         'published' => 'Published',
-                                        'scheduled' => 'Scheduled',
                                     ])
                                     ->live()
                                     ->afterStateUpdated(function (string $state, Set $set) {
                                         if ($state === 'published') {
                                             $set('published_date', now()->toDateString());
                                             $set('published_time', now()->format('H:i'));
-                                        }
-
-                                        if ($state === 'scheduled') {
-                                            $set('published_date', now()->addHour()->toDateString());
-                                            $set('published_time', now()->addHour()->format('H:i'));
                                         }
 
                                         if ($state === 'draft') {
@@ -104,8 +98,7 @@ class PostResource extends Resource
                                 Forms\Components\DatePicker::make('published_date')
                                     ->label('Publish date')
                                     ->native(true)
-                                    ->visible(fn (Get $get) => in_array($get('status'), ['published', 'scheduled'], true))
-                                    ->required(fn (Get $get) => $get('status') === 'scheduled')
+                                    ->visible(fn (Get $get) => $get('status') === 'published')
                                     ->helperText('For Published, this is auto-set.')
                                     ->afterStateHydrated(function (Set $set, $record) {
                                         if ($record?->published_at) {
@@ -116,16 +109,12 @@ class PostResource extends Resource
                                     ->label('Publish time')
                                     ->seconds(false)
                                     ->minutesStep(5)
-                                    ->visible(fn (Get $get) => in_array($get('status'), ['published', 'scheduled'], true))
-                                    ->required(fn (Get $get) => $get('status') === 'scheduled')
+                                    ->visible(fn (Get $get) => $get('status') === 'published')
                                     ->afterStateHydrated(function (Set $set, $record) {
                                         if ($record?->published_at) {
                                             $set('published_time', $record->published_at->format('H:i'));
                                         }
                                     }),
-                                Forms\Components\Toggle::make('allow_comments')
-                                    ->label('Allow Comments')
-                                    ->default(true),
                                 Forms\Components\Select::make('user_id')
                                     ->label('Author')
                                     ->relationship('author', 'name')
@@ -149,32 +138,6 @@ class PostResource extends Resource
                                     ->imagePreviewHeight('200')
                                     ->helperText('Recommended: 1600×900px, max 2MB.')
                                     ->maxSize(2048),
-                                Forms\Components\Select::make('tags')
-                                    ->label('Tags')
-                                    ->relationship('tags', 'name')
-                                    ->multiple()
-                                    ->preload()
-                                    ->searchable()
-                                    ->createOptionForm([
-                                        Forms\Components\TextInput::make('name')
-                                            ->required()
-                                            ->maxLength(50),
-                                        Forms\Components\TextInput::make('slug')
-                                            ->required()
-                                            ->maxLength(50),
-                                        Forms\Components\Select::make('color')
-                                            ->options([
-                                                'blue' => 'Blue',
-                                                'green' => 'Green',
-                                                'red' => 'Red',
-                                                'yellow' => 'Yellow',
-                                                'purple' => 'Purple',
-                                                'pink' => 'Pink',
-                                                'indigo' => 'Indigo',
-                                                'gray' => 'Gray',
-                                            ])
-                                            ->default('gray'),
-                                    ]),
                             ]),
                     ])
                     ->columnSpan(1),
@@ -199,7 +162,6 @@ class PostResource extends Resource
                     ->colors([
                         'warning' => 'draft',
                         'success' => 'published',
-                        'info' => 'scheduled',
                     ])
                     ->sortable(),
                 Tables\Columns\TextColumn::make('published_at')
@@ -216,7 +178,6 @@ class PostResource extends Resource
                     ->options([
                         'draft' => 'Draft',
                         'published' => 'Published',
-                        'scheduled' => 'Scheduled',
                     ]),
                 Tables\Filters\TrashedFilter::make(),
             ])

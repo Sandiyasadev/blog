@@ -46,8 +46,8 @@ class SecurityHeaders
             // Default fallback
             "default-src 'self'",
 
-            // Scripts - allow self, inline (for Alpine.js), and trusted CDNs
-            "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://challenges.cloudflare.com",
+            // Scripts - allow self and inline (for Alpine.js)
+            "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
 
             // Styles - allow self and inline (for Tailwind)
             "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
@@ -58,11 +58,8 @@ class SecurityHeaders
             // Fonts - allow self and Google Fonts
             "font-src 'self' https://fonts.gstatic.com https://fonts.googleapis.com",
 
-            // Connect - allow self and Cloudflare (for Turnstile)
-            "connect-src 'self' https://challenges.cloudflare.com",
-
-            // Frames - allow Cloudflare Turnstile
-            "frame-src 'self' https://challenges.cloudflare.com",
+            // Connect - allow self only
+            "connect-src 'self'",
 
             // Form actions - only allow posting to self
             "form-action 'self'",

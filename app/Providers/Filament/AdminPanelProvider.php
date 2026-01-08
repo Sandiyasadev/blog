@@ -32,6 +32,7 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->brandName('Blog Dashboard')
             ->font('Noto Sans', 'https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;700&display=swap', GoogleFontProvider::class)
+            ->darkMode(false)
             ->sidebarCollapsibleOnDesktop()
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')

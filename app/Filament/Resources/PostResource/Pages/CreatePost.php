@@ -45,10 +45,10 @@ class CreatePost extends CreateRecord
         $date = $data['published_date'] ?? null;
         $time = $data['published_time'] ?? null;
 
-        if (in_array($data['status'] ?? null, [PostStatus::Published->value, PostStatus::Scheduled->value], true)) {
+        if (($data['status'] ?? null) === PostStatus::Published->value) {
             if ($date && $time) {
                 $data['published_at'] = Carbon::parse($date . ' ' . $time);
-            } elseif (($data['status'] ?? null) === PostStatus::Published->value) {
+            } else {
                 $data['published_at'] = now();
             }
         }

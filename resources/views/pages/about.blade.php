@@ -65,7 +65,7 @@
 
             <h3>Kontak</h3>
             <p>
-                Punya pertanyaan atau ingin berdiskusi? Jangan ragu untuk <a href="{{ route('contact') }}">menghubungi saya</a>.
+                Punya pertanyaan atau ingin berdiskusi? Silakan hubungi saya melalui email.
                 Saya selalu senang mendengar dari pembaca.
             </p>
         </div>

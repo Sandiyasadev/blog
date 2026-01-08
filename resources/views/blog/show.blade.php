@@ -40,7 +40,7 @@
             </div>
             <div class="flex flex-col justify-center">
                 <p class="text-base font-bold leading-none mb-1">{{ $post->author?->name }}</p>
-                <p class="text-gray-500 text-sm font-normal">{{ optional($post->published_at)->format('M d, Y') }} • {{ $post->reading_time_text }} • {{ $post->comments()->where('status', 'approved')->count() }} comments</p>
+                <p class="text-gray-500 text-sm font-normal">{{ optional($post->published_at)->format('M d, Y') }} • {{ $post->reading_time_text }}</p>
             </div>
             <div class="ml-auto flex gap-2" x-data="{ copied: false, showShareMenu: false }">
                 {{-- Share Button --}}
@@ -118,19 +118,6 @@
             {!! $bodyHtml !!}
         </article>
 
-        <div class="max-w-[720px] mx-auto w-full mt-8 flex flex-wrap gap-2">
-            @forelse ($post->tags as $tag)
-                <a
-                    href="{{ route('posts.index', ['tag' => $tag->slug]) }}"
-                    class="px-3 py-1 {{ $tag->color_class }} rounded-full text-sm font-medium hover:opacity-80 transition-opacity"
-                >
-                    #{{ $tag->name }}
-                </a>
-            @empty
-                {{-- No tags --}}
-            @endforelse
-        </div>
-
         <hr class="my-12 border-gray-200 w-full" />
 
         @if ($post->author)
@@ -168,88 +155,6 @@
             </section>
         @endif
 
-        <section class="max-w-[720px] mx-auto w-full mt-12">
-            <h2 class="text-2xl font-bold mb-6">Komentar</h2>
-
-            @if (session('status'))
-                <div class="mb-4 rounded-lg bg-green-50 text-green-700 px-4 py-3 text-sm">
-                    {{ session('status') }}
-                </div>
-            @endif
-
-            @if ($post->allow_comments)
-                <form class="bg-gray-50 rounded-xl p-6 mb-8" method="POST" action="{{ route('posts.comments.store', $post) }}">
-                    @csrf
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-sm font-medium mb-1">Nama</label>
-                            <input name="author_name" class="w-full rounded-lg border-gray-200 focus:border-primary focus:ring-primary" value="{{ old('author_name') }}" required />
-                            @error('author_name')
-                                <p class="text-xs text-red-600 mt-1">{{ $message }}</p>
-                            @enderror
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium mb-1">Email (opsional)</label>
-                            <input name="author_email" type="email" class="w-full rounded-lg border-gray-200 focus:border-primary focus:ring-primary" value="{{ old('author_email') }}" />
-                            @error('author_email')
-                                <p class="text-xs text-red-600 mt-1">{{ $message }}</p>
-                            @enderror
-                        </div>
-                        <div class="sm:col-span-2">
-                            <label class="block text-sm font-medium mb-1">Website (opsional)</label>
-                            <input name="author_url" type="url" class="w-full rounded-lg border-gray-200 focus:border-primary focus:ring-primary" value="{{ old('author_url') }}" />
-                            @error('author_url')
-                                <p class="text-xs text-red-600 mt-1">{{ $message }}</p>
-                            @enderror
-                        </div>
-                        <div class="sm:col-span-2">
-                            <label class="block text-sm font-medium mb-1">Komentar</label>
-                            <textarea name="body_raw" rows="4" class="w-full rounded-lg border-gray-200 focus:border-primary focus:ring-primary" required>{{ old('body_raw') }}</textarea>
-                            @error('body_raw')
-                                <p class="text-xs text-red-600 mt-1">{{ $message }}</p>
-                            @enderror
-                        </div>
-                        <div class="hidden">
-                            <label>Website</label>
-                            <input name="website" type="text" value="" />
-                        </div>
-                        @if (config('services.turnstile.site_key'))
-                            <div class="sm:col-span-2">
-                                <div class="cf-turnstile" data-sitekey="{{ config('services.turnstile.site_key') }}" data-theme="light"></div>
-                                @error('cf-turnstile-response')
-                                    <p class="text-xs text-red-600 mt-1">{{ $message }}</p>
-                                @enderror
-                            </div>
-                        @endif
-                    </div>
-                    <div class="mt-4">
-                        <button class="px-4 py-2 rounded-lg bg-primary text-white text-sm font-bold hover:bg-blue-600 transition-colors">
-                            Kirim Komentar
-                        </button>
-                    </div>
-                </form>
-            @else
-                <div class="bg-gray-50 rounded-xl p-6 mb-8 text-sm text-gray-500">
-                    Komentar dinonaktifkan untuk postingan ini.
-                </div>
-            @endif
-
-            <div class="space-y-6">
-                @forelse ($comments as $comment)
-                    <div class="border border-gray-100 rounded-xl p-4 bg-white">
-                        <div class="flex items-center justify-between mb-2">
-                            <div>
-                                <p class="text-sm font-bold">{{ $comment->author_name }}</p>
-                                <p class="text-xs text-gray-500">{{ $comment->created_at->format('M d, Y') }}</p>
-                            </div>
-                        </div>
-                        <p class="text-sm text-gray-700 leading-relaxed">{!! nl2br(e($comment->body_sanitized)) !!}</p>
-                    </div>
-                @empty
-                    <p class="text-sm text-gray-500">Belum ada komentar.</p>
-                @endforelse
-            </div>
-        </section>
     </main>
 </div>
 @endsection
