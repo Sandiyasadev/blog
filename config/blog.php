@@ -16,4 +16,15 @@ return [
         'ttl' => env('BLOG_CACHE_TTL', 3600), // 1 hour default
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Admin Access
+    |--------------------------------------------------------------------------
+    |
+    | Email allowed to access the Filament admin panel.
+    |
+    */
+
+    'admin_email' => env('ADMIN_EMAIL', 'admin@blog.test'),
+
 ];
